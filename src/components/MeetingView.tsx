@@ -10,16 +10,25 @@ type MeetingViewProps = {
   meetingPassword: string,
 }
 
+// declare global {
+//   interface Window {
+//     ZoomMtg: any;
+//   }
+// }
+
+declare var ZoomMtg: any;
+
 // TODO: extract zoom 2.14.0 version
 const MeetingView: React.FC<MeetingViewProps> = ({ jwt, participantName, meetingNumber, meetingPassword }) => {
-  const [ZoomMtg, setZoomMtg] = useState<typeof ZoomMtgType | undefined>();
+  // const [ZoomMtg, setZoomMtg] = useState<typeof ZoomMtgType | undefined>();
 
   // This setup is based on the guide at:
   // https://developers.zoom.us/docs/meeting-sdk/web/client-view/import/#init-the-meeting-sdk
   useEffect(() => {
-    if (!ZoomMtg) {
-      import('@zoomus/websdk').then(module => setZoomMtg(module.ZoomMtg));
-    } else {
+    // if (!ZoomMtg) {
+    //   import('@zoomus/websdk').then(module => setZoomMtg(module.ZoomMtg));
+    // } else {
+      setTimeout(() => {
       ZoomMtg.setZoomJSLib('https://source.zoom.us/2.14.0/lib', '/av')
       ZoomMtg.preLoadWasm()
       ZoomMtg.prepareWebSDK()
@@ -49,20 +58,25 @@ const MeetingView: React.FC<MeetingViewProps> = ({ jwt, participantName, meeting
             console.log(error)
           }
         })
-      }, 1000)
-    }
-  }, [ZoomMtg]);
-
-  if (!ZoomMtg) {
-    return <p>Loading...</p>
-  }
+      }, 2000)
+    }, 2000)
+    // }
+  }, []);
 
   return <>
       <Head>
+        {/* Scripts */}
+        <script src="https://source.zoom.us/2.14.0/lib/vendor/react.min.js"></script>
+        <script src="https://source.zoom.us/2.14.0/lib/vendor/react-dom.min.js"></script>
+        <script src="https://source.zoom.us/2.14.0/lib/vendor/redux.min.js"></script>
+        <script src="https://source.zoom.us/2.14.0/lib/vendor/redux-thunk.min.js"></script>
+        <script src="https://source.zoom.us/2.14.0/lib/vendor/lodash.min.js"></script>
+        <script src="https://source.zoom.us/zoom-meeting-2.14.0.min.js"></script>
+
+        {/* Styles */}
         <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.14.0/css/bootstrap.css" />
         <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.14.0/css/react-select.css" />
       </Head>
-      <p>Hello</p>
   </>
 }
 
