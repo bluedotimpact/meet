@@ -10,13 +10,15 @@ export type JoinAsProps = {
 
 const useJoinAs = ({ cohortClassId, setPage }: JoinAsProps) => {
   const [joinError, setJoinError] = useState<string>('');
-  const joinAs = async ({ name }: { name: string }) => {
+  const [isJoining, setIsJoining] = useState<boolean>(false);
+  const joinAs = async ({ name, participantId }: { name: string, participantId?: string }) => {
     try {
       setJoinError('');
+      setIsJoining(true);
       const res = await axios.request<MeetingJwtResponse, AxiosResponse<MeetingJwtResponse>, MeetingJwtRequest>({
         method: 'post',
         url: '/api/public/meeting-jwt',
-        data: { cohortClassId },
+        data: { cohortClassId, participantId },
       });
       if (res.data.type === "error") {
         throw new Error(res.data.message)
@@ -30,10 +32,12 @@ const useJoinAs = ({ cohortClassId, setPage }: JoinAsProps) => {
       })
     } catch (err) {
       setJoinError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsJoining(false);
     }
   }
 
-  return { joinError, joinAs }
+  return { joinError, isJoining, joinAs }
 }
 
 export default useJoinAs;

@@ -19,7 +19,10 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
     data: { cohortId },
   });
 
-  const { joinAs, joinError } = useJoinAs({ cohortClassId: data?.type === "success" ? data.cohortClassId : "", setPage });
+  const { joinAs, isJoining, joinError } = useJoinAs({
+    cohortClassId: data?.type === "success" ? data.cohortClassId : "",
+    setPage
+  });
 
   if (loading) {
     return (
@@ -44,15 +47,24 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
       <div className="flex">
         <H1 className="flex-1">Hey there! Who are you?</H1>
       </div>
-      {joinError && <p>{joinError}</p>}
-      <div className="grid gap-2 md:w-1/2">
-        {data.participants.map((participant) => (
-          <Button key={participant.id} onClick={() => joinAs({ name: participant.name })}>{participant.name}</Button>
-        ))}
-      </div>
-      <div className='mt-4'>
-        <Link onClick={() => {setPage({ name: 'custom', cohortClassId: data.cohortClassId })}}>I'm not on this list</Link>
-      </div>
+      {joinError && <p className="mb-2">Error: {joinError}</p>}
+      {isJoining ? <p>Joining meeting...</p> : (<>
+        <div className="grid gap-2 md:w-1/2">
+          {data.participants.map((participant) => (
+            <Button
+              key={participant.id}
+              onClick={async () => {
+                await joinAs({ name: participant.name, participantId: participant.id })
+              }}
+            >
+              {participant.name}
+            </Button>
+          ))}
+        </div>
+        <div className='mt-4'>
+          <Link onClick={() => {setPage({ name: 'custom', cohortClassId: data.cohortClassId })}}>I'm not on this list</Link>
+        </div>
+      </>)}
     </Page>
   );
 }
