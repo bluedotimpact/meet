@@ -1,8 +1,14 @@
 import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { MeetingJwtRequest, MeetingJwtResponse } from "../../pages/api/public/meeting-jwt";
+import { PageState } from "./pageState";
 
-const useJoinAs = ({ cohortClassId, setPage }: CustomNameViewProps) => {
+export type JoinAsProps = {
+  cohortClassId: string,
+  setPage: (page: PageState) => void,
+}
+
+const useJoinAs = ({ cohortClassId, setPage }: JoinAsProps) => {
   const [joinError, setJoinError] = useState<string>('');
   const joinAs = async ({ name }: { name: string }) => {
     try {
