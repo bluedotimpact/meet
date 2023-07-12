@@ -1,7 +1,6 @@
-import Head from "next/head";
-import { useEffect, useState } from "react";
 import type { ZoomMtg as ZoomMtgType } from "@zoomus/websdk";
 import env from "../lib/client/env";
+import Script from "next/script";
 
 type MeetingViewProps = {
   jwt: string,
@@ -10,73 +9,59 @@ type MeetingViewProps = {
   meetingPassword: string,
 }
 
-// declare global {
-//   interface Window {
-//     ZoomMtg: any;
-//   }
-// }
+const ZOOM_VERSION = "2.14.0"
 
-declare var ZoomMtg: any;
+declare var ZoomMtg: typeof ZoomMtgType;
 
-// TODO: extract zoom 2.14.0 version
 const MeetingView: React.FC<MeetingViewProps> = ({ jwt, participantName, meetingNumber, meetingPassword }) => {
-  // const [ZoomMtg, setZoomMtg] = useState<typeof ZoomMtgType | undefined>();
-
   // This setup is based on the guide at:
   // https://developers.zoom.us/docs/meeting-sdk/web/client-view/import/#init-the-meeting-sdk
-  useEffect(() => {
-    // if (!ZoomMtg) {
-    //   import('@zoomus/websdk').then(module => setZoomMtg(module.ZoomMtg));
-    // } else {
-      setTimeout(() => {
-      ZoomMtg.setZoomJSLib('https://source.zoom.us/2.14.0/lib', '/av')
-      ZoomMtg.preLoadWasm()
-      ZoomMtg.prepareWebSDK()
-      ZoomMtg.i18n.load('en-US')
-      ZoomMtg.i18n.reload('en-US')
+  const onZoomLoad = () => {
+    ZoomMtg.setZoomJSLib(`https://source.zoom.us/${ZOOM_VERSION}/lib`, '/av')
+    ZoomMtg.preLoadWasm()
+    ZoomMtg.prepareWebSDK()
+    ZoomMtg.i18n.load('en-US')
+    ZoomMtg.i18n.reload('en-US')
 
-      setTimeout(() => {
-        ZoomMtg.init({
-          disablePreview: true,
-          leaveUrl: "/finished",
+    ZoomMtg.init({
+      disablePreview: true,
+      disableInvite: true,
+      leaveUrl: `/finished${window.location.search}`,
+      success: () => {
+        ZoomMtg.join({
+          sdkKey: env.NEXT_PUBLIC_ZOOM_CLIENT_ID,
+          signature: jwt,
+          userName: participantName,
+          meetingNumber: meetingNumber,
+          passWord: meetingPassword,
           success: () => {
-            ZoomMtg.join({
-              sdkKey: env.NEXT_PUBLIC_ZOOM_CLIENT_ID,
-              signature: jwt,
-              userName: participantName,
-              meetingNumber: meetingNumber,
-              passWord: meetingPassword,
-              success: () => {
-                console.log('Joined meeting successfully')
-              },
-              error: (error: unknown) => {
-                console.log(error)
-              }
-            })
+            console.log('Joined meeting successfully')
           },
           error: (error: unknown) => {
-            console.log(error)
+            console.log('Error joining meeting', error)
           }
         })
-      }, 2000)
-    }, 2000)
-    // }
-  }, []);
+      },
+      error: (error: unknown) => {
+        console.log('Error initializing Zoom client', error)
+      }
+    })
+  }
 
   return <>
-      <Head>
-        {/* Scripts */}
-        <script src="https://source.zoom.us/2.14.0/lib/vendor/react.min.js"></script>
-        <script src="https://source.zoom.us/2.14.0/lib/vendor/react-dom.min.js"></script>
-        <script src="https://source.zoom.us/2.14.0/lib/vendor/redux.min.js"></script>
-        <script src="https://source.zoom.us/2.14.0/lib/vendor/redux-thunk.min.js"></script>
-        <script src="https://source.zoom.us/2.14.0/lib/vendor/lodash.min.js"></script>
-        <script src="https://source.zoom.us/zoom-meeting-2.14.0.min.js"></script>
+    <div>
+      {/* Scripts */}
+      <Script src={`https://source.zoom.us/${ZOOM_VERSION}/lib/vendor/react.min.js`} async={false}/>
+      <Script src={`https://source.zoom.us/${ZOOM_VERSION}/lib/vendor/react-dom.min.js`} async={false} />
+      <Script src={`https://source.zoom.us/${ZOOM_VERSION}/lib/vendor/redux.min.js`} async={false}/>
+      <Script src={`https://source.zoom.us/${ZOOM_VERSION}/lib/vendor/redux-thunk.min.js`} async={false} />
+      <Script src={`https://source.zoom.us/${ZOOM_VERSION}/lib/vendor/lodash.min.js`} async={false} />
+      <Script src={`https://source.zoom.us/zoom-meeting-${ZOOM_VERSION}.min.js`} async={false} onLoad={onZoomLoad} />
 
-        {/* Styles */}
-        <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.14.0/css/bootstrap.css" />
-        <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.14.0/css/react-select.css" />
-      </Head>
+      {/* Styles */}
+      <link type="text/css" rel="stylesheet" href={`https://source.zoom.us/${ZOOM_VERSION}/css/bootstrap.css`} />
+      <link type="text/css" rel="stylesheet" href={`https://source.zoom.us/${ZOOM_VERSION}/css/react-select.css`} />
+    </div>
   </>
 }
 
