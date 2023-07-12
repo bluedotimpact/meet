@@ -8,7 +8,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy:prod": "VERCEL_PROJECT_ID=prj_OMSHY9c0ikY9jOyAvTD3FlP5FF9z VERCEL_ORG_ID=QbqUU7VQwMWpjbDCLDlR6ArA npm run _deploy:vercel",
+    "deploy:prod": "VERCEL_PROJECT_ID=prj_XtaVRKBQGBO5AWPJmPr64tZBZGiN VERCEL_ORG_ID=QbqUU7VQwMWpjbDCLDlR6ArA npm run _deploy:vercel",
     "_deploy:vercel": "vercel build --yes --prod --token=$VERCEL_TOKEN && vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN",
     "postinstall": "cp -n .env.template .env.local"
   },

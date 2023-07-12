@@ -10,11 +10,11 @@ The app presents a user interface where people can join via links like:
 meet.bluedotimpact.org/?cohortId=rec1234
 ```
 
-Behind the scenes, we make API calls to Airtable to get information regarding that cohort, the cohort classes and the participants in that cohort. Once we find the nearest cohort class, we present the participants in it so people can choose to login as that participant.
-
-For participants, they are joined immediately. Facilitators need to enter a password to get access to the host controls.
+Behind the scenes, we make API calls to Airtable to get information regarding that cohort, the cohort classes and the participants in that cohort. Once we find the nearest cohort class, we present the participants in it so people can choose to login as that participant. In case someone else is joining, we give users an escape hatch to enter a custom name.
 
 We then render the Zoom meeting with the [Zoom Meeting SDK](https://developers.zoom.us/docs/meeting-sdk/web/).
+
+Once in the meeting, the facilitator can claim host with the host key.
 
 ## Future potential changes
 
