@@ -46,7 +46,7 @@ export default apiRoute(async (
   const oPayload = {
     sdkKey: env.NEXT_PUBLIC_ZOOM_CLIENT_ID,
     mn: meetingNumber,
-    role: 0,
+    role: 1,
     iat: issuedAt,
     exp: expiresAt,
     tokenExp: expiresAt
