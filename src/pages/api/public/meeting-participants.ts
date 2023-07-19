@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import db from '../../../lib/api/db';
-import { cohortClassTable, cohortTable, participantTable } from '../../../lib/api/db/tables';
+import { cohortClassTable, cohortTable, participantTable, zoomAccountTable } from '../../../lib/api/db/tables';
 import { apiRoute } from '../../../lib/api/apiRoute';
 
 export type MeetingParticipantsRequest = {
@@ -16,6 +16,9 @@ export type MeetingParticipantsResponse = {
     role: 'host' | 'participant',
   }[],
 } | {
+  type: 'redirect',
+  to: string,
+} | {
   type: 'error',
   message: string,
 };
@@ -24,6 +27,17 @@ export default apiRoute(async (
   req: NextApiRequest,
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
+  // Except for the internal testing cohort, redirect all others to normal Zoom
+  if (req.body.cohortId !== "recLqS4X2i7q6HD0i") {
+    const cohort = await db.get(cohortTable, req.body.cohortId)
+    const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
+    res.status(200).json({
+      type: 'redirect',
+      to: zoomAccount['Meeting link'],
+    });
+    return;
+  }
+
   const allCohortClasses = await db.scan(cohortClassTable);
   const cohortCohortClasses = allCohortClasses.filter(cohortClass => (
     cohortClass.Cohort === req.body.cohortId && cohortClass['Start date/time'] !== null

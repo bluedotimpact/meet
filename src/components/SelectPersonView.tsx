@@ -6,6 +6,7 @@ import { Page } from "./Page";
 import { H1 } from "./Text";
 import Button from "./Button";
 import Link from "./Link";
+import { useEffect } from "react";
 
 export type SelectPersonViewProps = {
   cohortId: string,
@@ -33,13 +34,22 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
   }
 
   const errorMessage = error?.response?.data?.type === "error" ? error.response.data.message : error?.message;
-  if (errorMessage || data?.type !== "success") {
+  if (errorMessage || !data || data.type === "error") {
     return (
       <Page>
         <H1 className="flex-1">Error: {errorMessage ?? "Unknown error"}</H1>
         <p>If this error persists, please contact us at software@bluedotimpact.org.</p>
       </Page>
     )
+  }
+
+  if (data.type === "redirect") {
+    window.location.href = data.to;
+    return (
+      <Page>
+        <H1 className="flex-1">Redirecting...</H1>
+      </Page>
+    );
   }
 
   return (
