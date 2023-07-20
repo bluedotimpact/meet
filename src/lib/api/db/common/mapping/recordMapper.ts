@@ -48,7 +48,15 @@ const mapRecordTypeAirtableToTs = <
       throw new Error(`Expected field ${record._table.name}.${fieldName} to be able to map to ts type ${tsType}, but got airtable type ${airtableType} which can't.`);
     }
 
-    item[fieldName] = specificMapper(value as any) as FromTsTypeString<T[keyof T]>;
+    try {
+      item[fieldName] = specificMapper(value as any) as FromTsTypeString<T[keyof T]>;
+    } catch (error) {
+      if (error instanceof Error) {
+        error.message = `Failed to map field ${record._table.name}.${fieldName}: ${error.message}`;
+        error.stack = `Error: Failed to map field ${record._table.name}.${fieldName}: ${error.stack?.startsWith('Error: ') ? error.stack.slice('Error: '.length) : error.stack}`;
+      }
+      throw error;
+    }
   });
 
   return Object.assign(item, { id: record.id });
