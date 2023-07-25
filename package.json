@@ -10,7 +10,7 @@
     "test:watch": "vitest",
     "deploy:prod": "VERCEL_PROJECT_ID=prj_XtaVRKBQGBO5AWPJmPr64tZBZGiN VERCEL_ORG_ID=QbqUU7VQwMWpjbDCLDlR6ArA npm run _deploy:vercel",
     "_deploy:vercel": "vercel build --yes --prod --token=$VERCEL_TOKEN && vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN",
-    "postinstall": "shx cp -n .env.template .env.local"
+    "postinstall": "shx cp -n .env.template .env.local && patch-package"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.16",
@@ -32,9 +32,10 @@
     "google-auth-library": "^8.7.0",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.1",
-    "next": "13.1.5",
+    "next": "^13.4.12",
     "node-mocks-http": "^1.12.1",
     "oidc-client": "^1.11.5",
+    "patch-package": "^7.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "shx": "^0.3.4",
