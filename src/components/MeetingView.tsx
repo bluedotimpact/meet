@@ -1,6 +1,7 @@
 import type { ZoomMtg as ZoomMtgType } from "@zoomus/websdk";
 import env from "../lib/client/env";
 import Script from "next/script";
+import Head from "next/head";
 
 type MeetingViewProps = {
   jwt: string,
@@ -59,8 +60,10 @@ const MeetingView: React.FC<MeetingViewProps> = ({ jwt, participantName, meeting
       <Script src={`https://source.zoom.us/zoom-meeting-${ZOOM_VERSION}.min.js`} async={false} onLoad={onZoomLoad} />
 
       {/* Styles */}
-      <link type="text/css" rel="stylesheet" href={`https://source.zoom.us/${ZOOM_VERSION}/css/bootstrap.css`} />
-      <link type="text/css" rel="stylesheet" href={`https://source.zoom.us/${ZOOM_VERSION}/css/react-select.css`} />
+      <Head>
+        <link key="zoom-bootstrap" type="text/css" rel="stylesheet" href={`https://source.zoom.us/${ZOOM_VERSION}/css/bootstrap.css`} />
+        <link key="zoom-react-select" type="text/css" rel="stylesheet" href={`https://source.zoom.us/${ZOOM_VERSION}/css/react-select.css`} />
+      </Head>
     </div>
   </>
 }
