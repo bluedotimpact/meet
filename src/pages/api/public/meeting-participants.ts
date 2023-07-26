@@ -27,9 +27,8 @@ export default apiRoute(async (
   req: NextApiRequest,
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
-  // Except for the internal testing cohort, redirect all others to normal Zoom
-  if (req.body.cohortId !== "recLqS4X2i7q6HD0i") {
-    const cohort = await db.get(cohortTable, req.body.cohortId)
+  const cohort = await db.get(cohortTable, req.body.cohortId)
+  if (!cohort['Enable embedded meetings']) {
     const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
     res.status(200).json({
       type: 'redirect',
@@ -62,7 +61,6 @@ export default apiRoute(async (
   });
   const cohortClass = nearestCohortClassWithDistance.cohortClass;
 
-  const cohort = await db.get(cohortTable, cohortClass.Cohort)
   const facilitator = await db.get(participantTable, cohort.Facilitator)
   const participants = await Promise.all(
     cohortClass['Participants (Expected)']

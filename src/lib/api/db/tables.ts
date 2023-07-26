@@ -6,6 +6,7 @@ export interface Cohort extends Item {
   'Facilitator': string,
   'Zoom account': string
   'Iteration (link) (from Facilitator)': string,
+  'Enable embedded meetings': boolean,
 }
 
 export const cohortTable: Table<Cohort> = {
@@ -17,6 +18,7 @@ export const cohortTable: Table<Cohort> = {
     'Facilitator': 'string',
     'Zoom account': 'string',
     'Iteration (link) (from Facilitator)': 'string',
+    'Enable embedded meetings': 'boolean',
   },
 };
 
