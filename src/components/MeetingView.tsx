@@ -27,6 +27,7 @@ const MeetingView: React.FC<MeetingViewProps> = ({ jwt, participantName, meeting
     ZoomMtg.init({
       disablePreview: true,
       disableInvite: true,
+      defaultView: 'gallery',
       leaveUrl: `/finished${window.location.search}`,
       success: () => {
         ZoomMtg.join({

@@ -28,7 +28,24 @@ export type FromTsTypeString<T> =
                         T extends 'boolean[] | null' ? boolean[] | null :
                           never;
 
-export type AirtableTypeString = 'singleLineText' | 'email' | 'url' | 'multilineText' | 'phoneNumber' | 'checkbox' | 'number' | 'percent' | 'currency' | 'count' | 'autoNumber' | 'rating' | 'richText' | 'duration' | 'multipleRecordLinks' | 'dateTime';
+export type AirtableTypeString =
+  | 'singleLineText'
+  | 'email'
+  | 'url'
+  | 'multilineText'
+  | 'phoneNumber'
+  | 'checkbox'
+  | 'number'
+  | 'percent'
+  | 'currency'
+  | 'count'
+  | 'autoNumber'
+  | 'rating'
+  | 'richText'
+  | 'duration'
+  | 'multipleRecordLinks'
+  | 'dateTime'
+  | 'multipleLookupValues';
 
 // Should map an AirtableTypeString to its cell format, as per
 // https://airtable.com/developers/web/api/field-model
@@ -51,8 +68,9 @@ export type FromAirtableTypeString<T> =
                             T extends 'count' ? number :
                               T extends 'autoNumber' ? number :
                                 T extends 'multipleRecordLinks' ? string[] :
-                                  T extends 'dateTime' ? string :
-                                    never);
+                                  T extends 'multipleLookupValues' ? FromAirtableTypeString<any>[] :
+                                    T extends 'dateTime' ? string :
+                                      never);
 
 interface TypeDef {
   single: 'string' | 'number' | 'boolean',

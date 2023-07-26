@@ -66,6 +66,21 @@ export const fieldMappers: Mapper = {
         return date.toJSON();
       },
     },
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value) {
+          throw new Error('Failed to coerce multipleLookupValues type field to a single string, as it was blank');
+        }
+        if (value.length !== 1) {
+          throw new Error(`Can't coerce multipleLookupValues to a single string, as there were ${value?.length} entries`);
+        }
+        if (typeof value[0] !== "string") {
+          throw new Error(`Can't coerce singular multipleLookupValues to a single string, as it was of type ${typeof value[0]}`);
+        }
+        return value[0];
+      }
+    }
   },
   'string | null': {
     singleLineText: fallbackMapperPair(null, null),
@@ -106,12 +121,57 @@ export const fieldMappers: Mapper = {
         return date.toJSON();
       },
     },
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value || value.length === 0) {
+          return null
+        }
+        if (value.length !== 1) {
+          throw new Error(`Can't coerce multipleLookupValues to a single string, as there were ${value?.length} entries`);
+        }
+        if (typeof value[0] !== "string") {
+          throw new Error(`Can't coerce singular multipleLookupValues to a single string, as it was of type ${typeof value[0]}`);
+        }
+        return value[0];
+      }
+    }
   },
   boolean: {
     checkbox: fallbackMapperPair(false, false),
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value) {
+          throw new Error('Failed to coerce multipleLookupValues type field to a single boolean, as it was blank');
+        }
+        if (value.length !== 1) {
+          throw new Error(`Can't coerce multipleLookupValues to a single boolean, as there were ${value?.length} entries`);
+        }
+        if (typeof value[0] !== "boolean") {
+          throw new Error(`Can't coerce singular multipleLookupValues to a single boolean, as it was of type ${typeof value[0]}`);
+        }
+        return value[0];
+      }
+    }
   },
   'boolean | null': {
     checkbox: fallbackMapperPair(null, null),
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value || value.length === 0) {
+          return null
+        }
+        if (value.length !== 1) {
+          throw new Error(`Can't coerce multipleLookupValues to a single boolean, as there were ${value?.length} entries`);
+        }
+        if (typeof value[0] !== "boolean") {
+          throw new Error(`Can't coerce singular multipleLookupValues to a single boolean, as it was of type ${typeof value[0]}`);
+        }
+        return value[0];
+      }
+    }
   },
   number: {
     number: requiredMapperPair,
@@ -144,6 +204,21 @@ export const fieldMappers: Mapper = {
         return Math.floor(date.getTime() / 1000);
       },
     },
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value) {
+          throw new Error('Failed to coerce multipleLookupValues type field to a single number, as it was blank');
+        }
+        if (value.length !== 1) {
+          throw new Error(`Can't coerce multipleLookupValues to a single number, as there were ${value?.length} entries`);
+        }
+        if (typeof value[0] !== "number") {
+          throw new Error(`Can't coerce singular multipleLookupValues to a single number, as it was of type ${typeof value[0]}`);
+        }
+        return value[0];
+      }
+    }
   },
   'number | null': {
     number: fallbackMapperPair(null, null),
@@ -178,11 +253,53 @@ export const fieldMappers: Mapper = {
         return Math.floor(date.getTime() / 1000);
       },
     },
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value || value.length === 0) {
+          return null
+        }
+        if (value.length !== 1) {
+          throw new Error(`Can't coerce multipleLookupValues to a single number, as there were ${value?.length} entries`);
+        }
+        if (typeof value[0] !== "number") {
+          throw new Error(`Can't coerce singular multipleLookupValues to a single number, as it was of type ${typeof value[0]}`);
+        }
+        return value[0];
+      }
+    }
   },
   'string[]': {
     multipleRecordLinks: fallbackMapperPair([], []),
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!Array.isArray(value)) {
+          throw new Error('Failed to coerce multipleLookupValues type field to a string array, as it was not an array');
+        }
+        if (value.some(v => typeof v !== "string")) {
+          throw new Error(`Can't coerce multipleLookupValues to a string array, as it had non string type`);
+        }
+        return value as string[];
+      }
+    }
   },
   'string[] | null': {
     multipleRecordLinks: fallbackMapperPair(null, null),
+    multipleLookupValues: {
+      toAirtable: () => { throw new Error('multipleLookupValues type field is readonly'); },
+      fromAirtable: (value) => {
+        if (!value && !Array.isArray(value)) {
+          return null;
+        }
+        if (!Array.isArray(value)) {
+          throw new Error('Failed to coerce multipleLookupValues type field to a string array, as it was not an array');
+        }
+        if (value.some(v => typeof v !== "string")) {
+          throw new Error(`Can't coerce multipleLookupValues to a string array, as it had non string type`);
+        }
+        return value as string[];
+      }
+    }
   },
 };

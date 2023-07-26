@@ -5,6 +5,7 @@ export interface Cohort extends Item {
   'Cohort sessions': string[],
   'Facilitator': string,
   'Zoom account': string
+  'Iteration (link) (from Facilitator)': string,
 }
 
 export const cohortTable: Table<Cohort> = {
@@ -15,6 +16,7 @@ export const cohortTable: Table<Cohort> = {
     'Cohort sessions': 'string[]',
     'Facilitator': 'string',
     'Zoom account': 'string',
+    'Iteration (link) (from Facilitator)': 'string',
   },
 };
 
@@ -60,5 +62,31 @@ export const zoomAccountTable: Table<ZoomAccount> = {
   tableId: env.AIRTABLE_ZOOM_ACCOUNT_TABLE_ID,
   schema: {
     'Meeting link': 'string',
+  },
+};
+
+export interface Iteration extends Item {
+  'Courses': string,
+}
+
+export const iterationTable: Table<Iteration> = {
+  name: 'iteration',
+  baseId: env.AIRTABLE_BASE_ID,
+  tableId: env.AIRTABLE_ITERATION_TABLE_ID,
+  schema: {
+    'Courses': 'string',
+  },
+};
+
+export interface Course extends Item {
+  'Course Site': string,
+}
+
+export const courseTable: Table<Course> = {
+  name: 'course',
+  baseId: env.AIRTABLE_BASE_ID,
+  tableId: env.AIRTABLE_COURSE_TABLE_ID,
+  schema: {
+    'Course Site': 'string',
   },
 };
