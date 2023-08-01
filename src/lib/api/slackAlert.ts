@@ -15,7 +15,7 @@ export const slackAlert = async (message: string): Promise<void> => {
     },
     data: {
       channel: env.ALERTS_SLACK_CHANNEL_ID,
-      text: message,
+      text: `meet: ${message}`,
     },
   }).then((res) => {
     if (!res.data.ok) {
