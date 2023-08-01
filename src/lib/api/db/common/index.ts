@@ -14,6 +14,9 @@ export class TypedAirtable {
   }
 
   async get<T extends Item>(table: Table<T>, id: string): Promise<T> {
+    if (!id) {
+      throw new Error(`Tried to get record in ${table.name} with no id`);
+    }
     const airtableTable = await getAirtableTable(this.airtable, table);
     const record = await airtableTable.find(id) as AirtableRecord;
     if (!record) {
@@ -44,6 +47,9 @@ export class TypedAirtable {
   }
 
   async remove<T extends Item>(table: Table<T>, id: string): Promise<T> {
+    if (!id) {
+      throw new Error(`Tried to remove record in ${table.name} with no id`);
+    }
     const airtableTable = await getAirtableTable(this.airtable, table);
     const record = await airtableTable.destroy(id) as AirtableRecord;
     return mapRecordFromAirtable(table, record);
