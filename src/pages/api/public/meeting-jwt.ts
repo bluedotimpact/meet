@@ -20,6 +20,11 @@ export type MeetingJwtResponse = {
   message: string,
 };
 
+const ZOOM_ROLE = {
+  HOST: 1,
+  PARTICIPANT: 0,
+};
+
 export default apiRoute(async (
   req: NextApiRequest,
   res: NextApiResponse<MeetingJwtResponse>,
@@ -46,7 +51,7 @@ export default apiRoute(async (
   const oPayload = {
     sdkKey: env.NEXT_PUBLIC_ZOOM_CLIENT_ID,
     mn: meetingNumber,
-    role: 1,
+    role: cohort.Facilitator === req.body.participantId ? ZOOM_ROLE.HOST : ZOOM_ROLE.PARTICIPANT,
     iat: issuedAt,
     exp: expiresAt,
     tokenExp: expiresAt,

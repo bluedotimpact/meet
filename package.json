@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.0.16",
     "@next/font": "13.1.5",
     "@types/http-errors": "^2.0.1",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
