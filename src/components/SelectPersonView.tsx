@@ -74,6 +74,9 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
           <div className="mt-4">
             <Link onClick={() => { setPage({ name: 'custom', cohortClassId: data.cohortClassId }); }}>I'm not on this list</Link>
           </div>
+          <div className="mt-4">
+            <Link href={data.joinWithAppUrl}>Join with the Zoom desktop app</Link>
+          </div>
         </>
       )}
     </Page>

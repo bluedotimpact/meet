@@ -17,6 +17,7 @@ export type MeetingParticipantsResponse = {
     name: string,
     role: 'host' | 'participant',
   }[],
+  joinWithAppUrl: string,
 } | {
   type: 'redirect',
   to: string,
@@ -30,8 +31,8 @@ export default apiRoute(async (
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
   const cohort = await db.get(cohortTable, req.body.cohortId);
+  const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
   if (!cohort['Enable embedded meetings']) {
-    const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
     res.status(200).json({
       type: 'redirect',
       to: zoomAccount['Meeting link'],
@@ -77,5 +78,6 @@ export default apiRoute(async (
       ...participants.map((participant) => ({ id: participant.id, name: participant.Name, role: 'participant' as const })),
     // eslint-disable-next-line no-nested-ternary
     ].sort((a, b) => ((a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0)),
+    joinWithAppUrl: zoomAccount['Meeting link'],
   });
 }, 'insecure_no_auth');
