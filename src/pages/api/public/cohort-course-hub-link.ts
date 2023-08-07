@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import jsonwebtoken from 'jsonwebtoken';
 import { apiRoute } from '../../../lib/api/apiRoute';
 import db from '../../../lib/api/db';
 import { cohortTable, courseTable, iterationTable } from '../../../lib/api/db/tables';

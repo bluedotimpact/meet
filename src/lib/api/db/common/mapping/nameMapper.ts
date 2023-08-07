@@ -1,4 +1,6 @@
-import { Item, Table, FromTsTypeString, TsTypeString } from './types';
+import {
+  Item, Table, FromTsTypeString, TsTypeString,
+} from './types';
 
 /**
  * Maps a TS object (matching table.mappings) to another TS object (matching table.schema),

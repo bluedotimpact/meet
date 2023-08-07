@@ -41,12 +41,14 @@ const getAirtableBaseSchema = async (airtable: Airtable, baseId: string): Promis
     return fromCache.data;
   }
 
+  // eslint-disable-next-line no-underscore-dangle
   if (!airtable._apiKey) {
-    throw new Error("Airtable instance missing API key");
+    throw new Error('Airtable instance missing API key');
   }
   const res = await axios<{ tables: BaseSchema }>({
     url: `https://api.airtable.com/v0/meta/bases/${baseId}/tables`,
     headers: {
+      // eslint-disable-next-line no-underscore-dangle
       Authorization: `Bearer ${airtable._apiKey}`,
     },
   });

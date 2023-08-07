@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
 import { NextApiHandler } from 'next';
 import { slackAlert } from './slackAlert';
-import { assertTokenValid } from './tokens';
 
 export const apiRoute = (handler: NextApiHandler, useAuth: true | 'insecure_no_auth' = true): NextApiHandler => async (req, res) => {
   try {
@@ -10,7 +9,7 @@ export const apiRoute = (handler: NextApiHandler, useAuth: true | 'insecure_no_a
       if (!token) {
         throw new createHttpError.Unauthorized('Missing token');
       }
-      assertTokenValid(token);
+      throw new Error('Authenticated endpoints not supported');
     }
     await handler(req, res);
   } catch (err: unknown) {

@@ -52,7 +52,9 @@ const mapRecordTypeAirtableToTs = <
       item[fieldName] = specificMapper(value as any) as FromTsTypeString<T[keyof T]>;
     } catch (error) {
       if (error instanceof Error) {
+        // eslint-disable-next-line no-underscore-dangle
         error.message = `Failed to map field ${record._table.name}.${fieldName}: ${error.message}`;
+        // eslint-disable-next-line no-underscore-dangle
         error.stack = `Error: Failed to map field ${record._table.name}.${fieldName}: ${error.stack?.startsWith('Error: ') ? error.stack.slice('Error: '.length) : error.stack}`;
       }
       throw error;

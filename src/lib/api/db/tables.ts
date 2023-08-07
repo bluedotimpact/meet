@@ -15,7 +15,7 @@ export const cohortTable: Table<Cohort> = {
   tableId: env.AIRTABLE_COHORT_TABLE_ID,
   schema: {
     'Cohort sessions': 'string[]',
-    'Facilitator': 'string',
+    Facilitator: 'string',
     'Zoom account': 'string',
     'Iteration (link) (from Facilitator)': 'string',
     'Enable embedded meetings': 'boolean',
@@ -37,7 +37,7 @@ export const cohortClassTable: Table<CohortClass> = {
     'Participants (Expected)': 'string[]',
     'Participants (Attended) BETA': 'string[]',
     'Start date/time': 'number | null',
-    'Cohort': 'string',
+    Cohort: 'string',
   },
 };
 
@@ -50,7 +50,7 @@ export const participantTable: Table<Participant> = {
   baseId: env.AIRTABLE_BASE_ID,
   tableId: env.AIRTABLE_PARTICIPANT_TABLE_ID,
   schema: {
-    'Name': 'string',
+    Name: 'string',
   },
 };
 
@@ -76,7 +76,7 @@ export const iterationTable: Table<Iteration> = {
   baseId: env.AIRTABLE_BASE_ID,
   tableId: env.AIRTABLE_ITERATION_TABLE_ID,
   schema: {
-    'Courses': 'string',
+    Courses: 'string',
   },
 };
 
