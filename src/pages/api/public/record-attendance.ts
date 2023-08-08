@@ -29,8 +29,8 @@ export default apiRoute(async (
   }
 
   const cohortClass = await db.get(cohortClassTable, req.body.cohortClassId);
-  if (!cohortClass['Attendees'].includes(req.body.participantId)) {
-    await db.update(cohortClassTable, { ...cohortClass, 'Attendees': [...cohortClass['Attendees'], req.body.participantId] });
+  if (!cohortClass.Attendees.includes(req.body.participantId)) {
+    await db.update(cohortClassTable, { ...cohortClass, Attendees: [...cohortClass.Attendees, req.body.participantId] });
   }
 
   res.status(200).json({
