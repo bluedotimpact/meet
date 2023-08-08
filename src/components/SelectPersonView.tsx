@@ -1,4 +1,6 @@
 import useAxios from 'axios-hooks';
+import { useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
 import { PageState } from '../lib/client/pageState';
 import { MeetingParticipantsRequest, MeetingParticipantsResponse } from '../pages/api/public/meeting-participants';
 import useJoinAs from '../lib/client/useJoinAs';
@@ -6,11 +8,14 @@ import { Page } from './Page';
 import { H1 } from './Text';
 import Button from './Button';
 import Link from './Link';
+import { RecordAttendanceRequest, RecordAttendanceResponse } from '../pages/api/public/record-attendance';
 
 export type SelectPersonViewProps = {
   cohortId: string,
   setPage: (page: PageState) => void,
 };
+
+const LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY = 'preference_joinWithZoomApp';
 
 const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }) => {
   const [{ data, loading, error }] = useAxios<MeetingParticipantsResponse, MeetingParticipantsRequest>({
@@ -23,6 +28,14 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
     cohortClassId: data?.type === 'success' ? data.cohortClassId : '',
     setPage,
   });
+
+  const [joinWithApp, _setJoinWithApp] = useState(
+    JSON.parse(localStorage.getItem(LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY) ?? 'false'),
+  );
+  const setJoinWithApp = (value: boolean) => {
+    localStorage.setItem(LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY, JSON.stringify(value));
+    _setJoinWithApp(value);
+  };
 
   if (loading) {
     return (
@@ -64,6 +77,16 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
               <Button
                 key={participant.id}
                 onClick={async () => {
+                  if (joinWithApp) {
+                    await axios<RecordAttendanceResponse, AxiosResponse<MeetingParticipantsResponse>, RecordAttendanceRequest>({
+                      method: 'POST',
+                      url: '/api/public/record-attendance',
+                      data: { cohortClassId: data.cohortClassId, participantId: participant.id },
+                    });
+                    window.location.href = data.joinWithAppUrl;
+                    return;
+                  }
+
                   await joinAs({ name: participant.name, participantId: participant.id });
                 }}
               >
@@ -72,11 +95,20 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
             ))}
           </div>
           <div className="mt-4">
-            <Link onClick={() => { setPage({ name: 'custom', cohortClassId: data.cohortClassId }); }}>I'm not on this list</Link>
+            <Link onClick={() => {
+              if (joinWithApp) {
+                window.location.href = data.joinWithAppUrl;
+                return;
+              }
+
+              setPage({ name: 'custom', cohortClassId: data.cohortClassId });
+            }}
+            >I'm not on this list
+            </Link>
           </div>
-          {/* <div className="mt-4">
-            <Link href={data.joinWithAppUrl}>Join with the Zoom desktop app</Link>
-          </div> */}
+          <div className="mt-4">
+            <label><input type="checkbox" checked={joinWithApp} onChange={(event) => setJoinWithApp(event.target.checked)} /> Join with the Zoom app</label>
+          </div>
         </>
       )}
     </Page>

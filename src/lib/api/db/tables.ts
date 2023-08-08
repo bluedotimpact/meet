@@ -24,7 +24,7 @@ export const cohortTable: Table<Cohort> = {
 
 export interface CohortClass extends Item {
   'Participants (Expected)': string[],
-  'Participants (Attended) BETA': string[],
+  'Attendees': string[],
   'Start date/time': number | null,
   'Cohort': string,
 }
@@ -35,7 +35,7 @@ export const cohortClassTable: Table<CohortClass> = {
   tableId: env.AIRTABLE_COHORT_CLASS_TABLE_ID,
   schema: {
     'Participants (Expected)': 'string[]',
-    'Participants (Attended) BETA': 'string[]',
+    Attendees: 'string[]',
     'Start date/time': 'number | null',
     Cohort: 'string',
   },
