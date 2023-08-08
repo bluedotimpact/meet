@@ -2,10 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { apiRoute } from '../../../lib/api/apiRoute';
 import db from '../../../lib/api/db';
 import { cohortClassTable } from '../../../lib/api/db/tables';
+import { slackAlert } from '../../../lib/api/slackAlert';
 
 export type RecordAttendanceRequest = {
   cohortClassId: string,
   participantId: string,
+  reason?: string,
 };
 
 export type RecordAttendanceResponse = {
@@ -31,6 +33,10 @@ export default apiRoute(async (
   const cohortClass = await db.get(cohortClassTable, req.body.cohortClassId);
   if (!cohortClass.Attendees.includes(req.body.participantId)) {
     await db.update(cohortClassTable, { ...cohortClass, Attendees: [...cohortClass.Attendees, req.body.participantId] });
+  }
+
+  if (req.body.reason) {
+    await slackAlert(`manual attendance update for cohort class ${req.body.cohortClassId} and participant ${req.body.participantId}, reason: ${req.body.reason}`);
   }
 
   res.status(200).json({
