@@ -19,7 +19,8 @@ const Home: React.FC = () => {
     return (
       <Page>
         <H1 className="flex-1">Error: Missing cohort id.</H1>
-        <p>Ensure you've navigated to the correct link, or try asking the person who gave the link to check it's correct.</p>
+        <p className="mb-2">Ensure you've navigated to the correct link, or try asking the person who gave the link to check it's correct.</p>
+        <p>If you're still having difficulties, drop us a line at software@bluedotimpact.org.</p>
       </Page>
     );
   }
