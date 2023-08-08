@@ -30,8 +30,8 @@ export default apiRoute(async (
   res: NextApiResponse<MeetingJwtResponse>,
 ) => {
   const cohortClass = await db.get(cohortClassTable, req.body.cohortClassId);
-  if (req.body.participantId && !cohortClass['Participants (Attended) BETA'].includes(req.body.participantId)) {
-    await db.update(cohortClassTable, { ...cohortClass, 'Participants (Attended) BETA': [...cohortClass['Participants (Attended) BETA'], req.body.participantId] });
+  if (req.body.participantId && !cohortClass.Attendees.includes(req.body.participantId)) {
+    await db.update(cohortClassTable, { ...cohortClass, Attendees: [...cohortClass.Attendees, req.body.participantId] });
   }
   const cohort = await db.get(cohortTable, cohortClass.Cohort);
   const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
