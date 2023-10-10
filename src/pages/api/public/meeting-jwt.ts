@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jsonwebtoken from 'jsonwebtoken';
+import createHttpError from 'http-errors';
 import { apiRoute } from '../../../lib/api/apiRoute';
 import db from '../../../lib/api/db';
 import { cohortClassTable, cohortTable, zoomAccountTable } from '../../../lib/api/db/tables';
@@ -34,6 +35,9 @@ export default apiRoute(async (
     await db.update(cohortClassTable, { ...cohortClass, Attendees: [...cohortClass.Attendees, req.body.participantId] });
   }
   const cohort = await db.get(cohortTable, cohortClass.Cohort);
+  if (!cohort['Zoom account']) {
+    throw new createHttpError.InternalServerError(`Cohort ${cohort.id} missing Zoom account`);
+  }
   const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
   const meetingLink = zoomAccount['Meeting link'];
   const matches = meetingLink.match(/\/j\/(\d+)\?pwd=([a-zA-Z0-9]+)/);

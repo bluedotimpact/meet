@@ -4,7 +4,7 @@ import { Table, Item } from './common/mapping/types';
 export interface Cohort extends Item {
   'Cohort sessions': string[],
   'Facilitator': string,
-  'Zoom account': string
+  'Zoom account': string | null,
   'Iteration (link) (from Facilitator)': string,
   'Enable embedded meetings': boolean,
 }
@@ -16,7 +16,7 @@ export const cohortTable: Table<Cohort> = {
   schema: {
     'Cohort sessions': 'string[]',
     Facilitator: 'string',
-    'Zoom account': 'string',
+    'Zoom account': 'string | null',
     'Iteration (link) (from Facilitator)': 'string',
     'Enable embedded meetings': 'boolean',
   },

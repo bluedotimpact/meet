@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import createHttpError from 'http-errors';
 import db from '../../../lib/api/db';
 import {
   cohortClassTable, cohortTable, participantTable, zoomAccountTable,
@@ -31,6 +32,9 @@ export default apiRoute(async (
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
   const cohort = await db.get(cohortTable, req.body.cohortId);
+  if (!cohort['Zoom account']) {
+    throw new createHttpError.InternalServerError(`Cohort ${cohort.id} missing Zoom account`);
+  }
   const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
   if (!cohort['Enable embedded meetings']) {
     res.status(200).json({
