@@ -32,17 +32,6 @@ export default apiRoute(async (
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
   const cohort = await db.get(cohortTable, req.body.cohortId);
-  if (!cohort['Zoom account']) {
-    throw new createHttpError.InternalServerError(`Cohort ${cohort.id} missing Zoom account`);
-  }
-  const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
-  if (!cohort['Enable embedded meetings']) {
-    res.status(200).json({
-      type: 'redirect',
-      to: zoomAccount['Meeting link'],
-    });
-    return;
-  }
 
   const allCohortClasses = await db.scan(cohortClassTable);
   const cohortCohortClasses = allCohortClasses.filter((cohortClass) => (
@@ -67,6 +56,18 @@ export default apiRoute(async (
     }
   });
   const { cohortClass } = nearestCohortClassWithDistance;
+
+  if (!cohortClass['Zoom account']) {
+    throw new createHttpError.InternalServerError(`Cohort class ${cohortClass.id} missing Zoom account`);
+  }
+  const zoomAccount = await db.get(zoomAccountTable, cohortClass['Zoom account']);
+  if (!cohort['Enable embedded meetings']) {
+    res.status(200).json({
+      type: 'redirect',
+      to: zoomAccount['Meeting link'],
+    });
+    return;
+  }
 
   const facilitator = await db.get(participantTable, cohort.Facilitator);
   const participants = await Promise.all(

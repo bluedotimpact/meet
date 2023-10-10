@@ -34,11 +34,10 @@ export default apiRoute(async (
   if (req.body.participantId && !cohortClass.Attendees.includes(req.body.participantId)) {
     await db.update(cohortClassTable, { ...cohortClass, Attendees: [...cohortClass.Attendees, req.body.participantId] });
   }
-  const cohort = await db.get(cohortTable, cohortClass.Cohort);
-  if (!cohort['Zoom account']) {
-    throw new createHttpError.InternalServerError(`Cohort ${cohort.id} missing Zoom account`);
+  if (!cohortClass['Zoom account']) {
+    throw new createHttpError.InternalServerError(`Cohort class ${cohortClass.id} missing Zoom account`);
   }
-  const zoomAccount = await db.get(zoomAccountTable, cohort['Zoom account']);
+  const zoomAccount = await db.get(zoomAccountTable, cohortClass['Zoom account']);
   const meetingLink = zoomAccount['Meeting link'];
   const matches = meetingLink.match(/\/j\/(\d+)\?pwd=([a-zA-Z0-9]+)/);
   if (!matches) {
@@ -50,6 +49,7 @@ export default apiRoute(async (
   }
   const [, meetingNumber, meetingPassword] = matches;
 
+  const cohort = await db.get(cohortTable, cohortClass.Cohort);
   const issuedAt = Math.round(Date.now() / 1000);
   const expiresAt = issuedAt + 3600 * 4;
   const oPayload = {
