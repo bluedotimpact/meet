@@ -10,7 +10,7 @@ type MeetingViewProps = {
   meetingPassword: string,
 };
 
-const ZOOM_VERSION = '2.14.0';
+export const ZOOM_VERSION = '2.18.2';
 
 declare let ZoomMtg: typeof ZoomMtgType;
 
