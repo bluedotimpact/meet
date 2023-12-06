@@ -61,14 +61,6 @@ export default apiRoute(async (
     throw new createHttpError.InternalServerError(`Cohort class ${cohortClass.id} missing Zoom account`);
   }
   const zoomAccount = await db.get(zoomAccountTable, cohortClass['Zoom account']);
-  if (!cohort['Enable embedded meetings']) {
-    res.status(200).json({
-      type: 'redirect',
-      to: zoomAccount['Meeting link'],
-    });
-    return;
-  }
-
   const facilitator = await db.get(participantTable, cohort.Facilitator);
   const participants = await Promise.all(
     cohortClass['Participants (Expected)']

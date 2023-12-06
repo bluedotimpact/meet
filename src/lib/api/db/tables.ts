@@ -5,7 +5,6 @@ export interface Cohort extends Item {
   'Cohort sessions': string[],
   'Facilitator': string,
   'Iteration (link) (from Facilitator)': string,
-  'Enable embedded meetings': boolean,
 }
 
 export const cohortTable: Table<Cohort> = {
@@ -16,7 +15,6 @@ export const cohortTable: Table<Cohort> = {
     'Cohort sessions': 'string[]',
     Facilitator: 'string',
     'Iteration (link) (from Facilitator)': 'string',
-    'Enable embedded meetings': 'boolean',
   },
 };
 
