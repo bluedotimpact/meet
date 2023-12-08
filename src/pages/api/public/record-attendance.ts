@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { apiRoute } from '../../../lib/api/apiRoute';
 import db from '../../../lib/api/db';
 import { cohortClassTable } from '../../../lib/api/db/tables';
-import { slackAlert } from '../../../lib/api/slackAlert';
 
 export type RecordAttendanceRequest = {
   cohortClassId: string,
