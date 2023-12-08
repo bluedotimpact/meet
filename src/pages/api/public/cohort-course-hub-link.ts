@@ -25,6 +25,6 @@ export default apiRoute(async (
 
   res.status(200).json({
     type: 'success',
-    url: course['Course Site'],
+    url: course['Course site'],
   });
 }, 'insecure_no_auth');
