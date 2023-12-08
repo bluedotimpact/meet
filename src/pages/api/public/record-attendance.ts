@@ -35,10 +35,6 @@ export default apiRoute(async (
     await db.update(cohortClassTable, { ...cohortClass, Attendees: [...cohortClass.Attendees, req.body.participantId] });
   }
 
-  if (req.body.reason) {
-    await slackAlert(`manual attendance update for cohort class ${req.body.cohortClassId} and participant ${req.body.participantId}, reason: ${req.body.reason}`);
-  }
-
   res.status(200).json({
     type: 'success',
   });
