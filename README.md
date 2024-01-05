@@ -7,7 +7,7 @@ An app for hosting meetings, e.g. facilitated sessions on our courses.
 The app presents a user interface where people can join via links like:
 
 ```
-meet.bluedotimpact.org/?cohortId=rec1234
+meet.bluedot.org/?cohortId=rec1234
 ```
 
 Behind the scenes, we make API calls to Airtable to get information regarding that cohort, the cohort classes and the participants in that cohort. Once we find the nearest cohort class, we present the participants in it so people can choose to login as that participant. In case someone else is joining, we give users an escape hatch to enter a custom name.
