@@ -37,6 +37,13 @@ export const cohortClassTable: Table<CohortClass> = {
     Cohort: 'string',
     'Zoom account': 'string | null',
   },
+  mappings: {
+    'Participants (Expected)': '[>] Participants (Expected)',
+    Attendees: '[>] Attendees',
+    'Start date/time': 'Start date/time',
+    Cohort: '[>] Cohort',
+    'Zoom account': '[>] Zoom account',
+  },
 };
 
 export interface Participant extends Item {
