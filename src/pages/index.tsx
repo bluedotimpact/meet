@@ -6,6 +6,7 @@ import MeetingView from '../components/MeetingView';
 import CustomNameView from '../components/CustomNameView';
 import SelectPersonView from '../components/SelectPersonView';
 import { PageState } from '../lib/client/pageState';
+import AppJoinView from '../components/AppJoinView';
 
 const Home: React.FC = () => {
   const searchParams = useSearchParams();
@@ -13,7 +14,7 @@ const Home: React.FC = () => {
   // TODO: use this to skip first page? or at least somehow highlight?
   // const participantId = searchParams.get('participantId') ?? undefined;
 
-  const [page, setPage] = useState<PageState>({ name: 'select' });
+  const [page, setPage] = useState<PageState>({ name: 'select', cohortId });
 
   if (!cohortId) {
     return (
@@ -25,13 +26,20 @@ const Home: React.FC = () => {
     );
   }
 
-  return (
-    <>
-      {page.name === 'select' && <SelectPersonView cohortId={cohortId} setPage={setPage} />}
-      {page.name === 'custom' && <CustomNameView cohortClassId={page.cohortClassId} setPage={setPage} />}
-      {page.name === 'room' && <MeetingView jwt={page.jwt} participantName={page.participantName} meetingNumber={page.meetingNumber} meetingPassword={page.meetingPassword} />}
-    </>
-  );
+  const pageName = page.name;
+  switch (pageName) {
+    case 'select':
+      return <SelectPersonView page={{ ...page, cohortId }} setPage={setPage} />;
+    case 'custom':
+      return <CustomNameView page={page} setPage={setPage} />;
+    case 'room':
+      return <MeetingView page={page} />;
+    case 'appJoin':
+      return <AppJoinView page={page} />;
+    default: {
+      throw new Error(`Unknown page: ${pageName satisfies never}`);
+    }
+  }
 };
 
 export default Home;

@@ -5,6 +5,7 @@ import {
   cohortClassTable, cohortTable, participantTable, zoomAccountTable,
 } from '../../../lib/api/db/tables';
 import { apiRoute } from '../../../lib/api/apiRoute';
+import { parseZoomLink } from '../../../lib/zoomLinkParser';
 
 export type MeetingParticipantsRequest = {
   cohortId: string,
@@ -18,7 +19,9 @@ export type MeetingParticipantsResponse = {
     name: string,
     role: 'host' | 'participant',
   }[],
-  joinWithAppUrl: string,
+  meetingNumber: string,
+  meetingPassword: string,
+  meetingHostKey: string,
 } | {
   type: 'redirect',
   to: string,
@@ -66,6 +69,8 @@ export default apiRoute(async (
     cohortClass['Participants (Expected)']
       .map((participantId) => db.get(participantTable, participantId)),
   );
+  const { meetingNumber, meetingPassword } = parseZoomLink(zoomAccount['Meeting link']);
+  const meetingHostKey = zoomAccount['Host key'];
 
   res.status(200).json({
     type: 'success',
@@ -75,6 +80,8 @@ export default apiRoute(async (
       ...participants.map((participant) => ({ id: participant.id, name: participant.Name, role: 'participant' as const })),
     // eslint-disable-next-line no-nested-ternary
     ].sort((a, b) => ((a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0)),
-    joinWithAppUrl: zoomAccount['Meeting link'],
+    meetingNumber,
+    meetingPassword,
+    meetingHostKey,
   });
 }, 'insecure_no_auth');

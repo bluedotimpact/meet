@@ -2,12 +2,10 @@ import type { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
 import Script from 'next/script';
 import Head from 'next/head';
 import env from '../lib/client/env';
+import { PageState } from '../lib/client/pageState';
 
 type MeetingViewProps = {
-  jwt: string,
-  participantName: string,
-  meetingNumber: string,
-  meetingPassword: string,
+  page: PageState & { name: 'room' }
 };
 
 export const ZOOM_VERSION = '2.18.2';
@@ -15,7 +13,9 @@ export const ZOOM_VERSION = '2.18.2';
 declare let ZoomMtg: typeof ZoomMtgType;
 
 const MeetingView: React.FC<MeetingViewProps> = ({
-  jwt, participantName, meetingNumber, meetingPassword,
+  page: {
+    jwt, participantName, meetingNumber, meetingPassword,
+  },
 }) => {
   // This setup is based on the guide at:
   // https://developers.zoom.us/docs/meeting-sdk/web/client-view/import/#init-the-meeting-sdk

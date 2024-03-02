@@ -6,11 +6,11 @@ import { H1 } from './Text';
 import Button from './Button';
 
 export type CustomNameViewProps = {
-  cohortClassId: string,
+  page: PageState & { name: 'custom' },
   setPage: (page: PageState) => void,
 };
 
-const CustomNameView: React.FC<CustomNameViewProps> = ({ cohortClassId, setPage }) => {
+const CustomNameView: React.FC<CustomNameViewProps> = ({ page: { cohortClassId }, setPage }) => {
   const [name, setName] = useState('');
   const { joinAs, isJoining, joinError } = useJoinAs({ cohortClassId, setPage });
 

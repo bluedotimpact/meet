@@ -61,6 +61,7 @@ export const participantTable: Table<Participant> = {
 
 export interface ZoomAccount extends Item {
   'Meeting link': string,
+  'Host key': string,
 }
 
 export const zoomAccountTable: Table<ZoomAccount> = {
@@ -69,6 +70,7 @@ export const zoomAccountTable: Table<ZoomAccount> = {
   tableId: env.AIRTABLE_ZOOM_ACCOUNT_TABLE_ID,
   schema: {
     'Meeting link': 'string',
+    'Host key': 'string',
   },
 };
 

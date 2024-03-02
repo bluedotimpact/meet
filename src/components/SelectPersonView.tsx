@@ -11,13 +11,13 @@ import Link from './Link';
 import { RecordAttendanceRequest, RecordAttendanceResponse } from '../pages/api/public/record-attendance';
 
 export type SelectPersonViewProps = {
-  cohortId: string,
+  page: PageState & { name: 'select' },
   setPage: (page: PageState) => void,
 };
 
 const LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY = 'preference_joinWithZoomApp';
 
-const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }) => {
+const SelectPersonView: React.FC<SelectPersonViewProps> = ({ page: { cohortId }, setPage }) => {
   const [{ data, loading, error }] = useAxios<MeetingParticipantsResponse, MeetingParticipantsRequest>({
     method: 'post',
     url: '/api/public/meeting-participants',
@@ -83,7 +83,12 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
                       url: '/api/public/record-attendance',
                       data: { cohortClassId: data.cohortClassId, participantId: participant.id },
                     });
-                    window.location.href = data.joinWithAppUrl;
+                    setPage({
+                      name: 'appJoin',
+                      meetingNumber: data.meetingNumber,
+                      meetingPassword: data.meetingPassword,
+                      meetingHostKey: participant.role === 'host' ? data.meetingHostKey : undefined,
+                    });
                     return;
                   }
 
@@ -95,15 +100,25 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ cohortId, setPage }
             ))}
           </div>
           <div className="mt-4">
-            <Link onClick={() => {
-              if (joinWithApp) {
-                window.location.href = data.joinWithAppUrl;
-                return;
-              }
+            Not on this list?
+            {' '}
+            <Link
+              onClick={() => {
+                if (joinWithApp) {
+                  setPage({
+                    name: 'appJoin',
+                    meetingNumber: data.meetingNumber,
+                    meetingPassword: data.meetingPassword,
+                    meetingHostKey: data.meetingHostKey,
+                  });
+                  return;
+                }
 
-              setPage({ name: 'custom', cohortClassId: data.cohortClassId });
-            }}
-            >I'm not on this list
+                setPage({ name: 'custom', cohortClassId: data.cohortClassId });
+              }}
+              className="underline"
+            >
+              Enter your name manually.
             </Link>
           </div>
           <div className="mt-4">

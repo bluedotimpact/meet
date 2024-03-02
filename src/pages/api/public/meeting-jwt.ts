@@ -5,6 +5,7 @@ import { apiRoute } from '../../../lib/api/apiRoute';
 import db from '../../../lib/api/db';
 import { cohortClassTable, cohortTable, zoomAccountTable } from '../../../lib/api/db/tables';
 import env from '../../../lib/api/env';
+import { parseZoomLink } from '../../../lib/zoomLinkParser';
 
 export type MeetingJwtRequest = {
   cohortClassId: string,
@@ -38,16 +39,7 @@ export default apiRoute(async (
     throw new createHttpError.InternalServerError(`Cohort class ${cohortClass.id} missing Zoom account`);
   }
   const zoomAccount = await db.get(zoomAccountTable, cohortClass['Zoom account']);
-  const meetingLink = zoomAccount['Meeting link'];
-  const matches = meetingLink.match(/\/j\/(\d+)\?pwd=([a-zA-Z0-9]+)/);
-  if (!matches) {
-    res.status(404).json({
-      type: 'error',
-      message: 'No zoom link found for this cohort.',
-    });
-    return;
-  }
-  const [, meetingNumber, meetingPassword] = matches;
+  const { meetingNumber, meetingPassword } = parseZoomLink(zoomAccount['Meeting link']);
 
   const cohort = await db.get(cohortTable, cohortClass.Cohort);
   const issuedAt = Math.round(Date.now() / 1000);
