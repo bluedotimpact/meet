@@ -35,12 +35,11 @@ export default apiRoute(async (
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
   const cohort = await db.get(cohortTable, req.body.cohortId);
-
-  const allCohortClasses = await db.scan(cohortClassTable);
-  const cohortCohortClasses = allCohortClasses.filter((cohortClass) => (
-    cohortClass.Cohort === req.body.cohortId && cohortClass['Start date/time'] !== null
-  ));
-  const cohortClassesWithDistance = cohortCohortClasses.map((cohortClass) => ({
+  const cohortClasses = await Promise.all(
+    cohort['Cohort sessions']
+      .map((cohortClassId) => db.get(cohortClassTable, cohortClassId)),
+  );
+  const cohortClassesWithDistance = cohortClasses.map((cohortClass) => ({
     cohortClass,
     distance: Math.abs((Date.now() / 1000) - cohortClass['Start date/time']!),
   }));
