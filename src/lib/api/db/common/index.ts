@@ -5,6 +5,7 @@ import { assertMatchesSchema } from './assertMatchesSchema';
 import { mapRecordFromAirtable, mapRecordToAirtable } from './mapping/recordMapper';
 import { Item, Table } from './mapping/types';
 import { AirtableRecord } from './types';
+import { getFields } from './getFields';
 
 export class TypedAirtable {
   private airtable: Airtable;
@@ -27,7 +28,10 @@ export class TypedAirtable {
 
   async scan<T extends Item>(table: Table<T>, params?: ScanParams): Promise<T[]> {
     const airtableTable = await getAirtableTable(this.airtable, table);
-    const records = await airtableTable.select(params).all() as AirtableRecord[];
+    const records = await airtableTable.select({
+      fields: getFields(table),
+      ...params,
+    }).all() as AirtableRecord[];
     return records.map((record) => mapRecordFromAirtable(table, record));
   }
 
