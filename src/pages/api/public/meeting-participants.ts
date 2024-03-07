@@ -84,3 +84,5 @@ export default apiRoute(async (
     meetingHostKey,
   });
 }, 'insecure_no_auth');
+
+export const maxDuration = 60;

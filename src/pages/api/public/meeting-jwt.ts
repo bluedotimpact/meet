@@ -62,3 +62,5 @@ export default apiRoute(async (
     meetingPassword,
   });
 }, 'insecure_no_auth');
+
+export const maxDuration = 60;

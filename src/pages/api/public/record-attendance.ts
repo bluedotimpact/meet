@@ -38,3 +38,5 @@ export default apiRoute(async (
     type: 'success',
   });
 }, 'insecure_no_auth');
+
+export const maxDuration = 60;
