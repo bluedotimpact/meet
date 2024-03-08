@@ -1,4 +1,4 @@
-import type { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
+import type { ZoomMtg as ZoomMtgType } from '@zoom/meetingsdk';
 import Script from 'next/script';
 import Head from 'next/head';
 import env from '../lib/client/env';
@@ -8,7 +8,7 @@ type MeetingViewProps = {
   page: PageState & { name: 'room' }
 };
 
-export const ZOOM_VERSION = '2.18.2';
+export const ZOOM_VERSION = '3.1.6';
 
 declare let ZoomMtg: typeof ZoomMtgType;
 
@@ -20,11 +20,8 @@ const MeetingView: React.FC<MeetingViewProps> = ({
   // This setup is based on the guide at:
   // https://developers.zoom.us/docs/meeting-sdk/web/client-view/import/#init-the-meeting-sdk
   const onZoomLoad = () => {
-    ZoomMtg.setZoomJSLib(`https://source.zoom.us/${ZOOM_VERSION}/lib`, '/av');
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareWebSDK();
-    ZoomMtg.i18n.load('en-US');
-    ZoomMtg.i18n.reload('en-US');
 
     ZoomMtg.init({
       disablePreview: true,
