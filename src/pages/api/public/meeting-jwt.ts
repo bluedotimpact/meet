@@ -3,7 +3,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import createHttpError from 'http-errors';
 import { apiRoute } from '../../../lib/api/apiRoute';
 import db from '../../../lib/api/db';
-import { cohortClassTable, cohortTable, zoomAccountTable } from '../../../lib/api/db/tables';
+import { cohortClassTable, zoomAccountTable } from '../../../lib/api/db/tables';
 import env from '../../../lib/api/env';
 import { parseZoomLink } from '../../../lib/zoomLinkParser';
 
@@ -41,13 +41,12 @@ export default apiRoute(async (
   const zoomAccount = await db.get(zoomAccountTable, cohortClass['Zoom account']);
   const { meetingNumber, meetingPassword } = parseZoomLink(zoomAccount['Meeting link']);
 
-  const cohort = await db.get(cohortTable, cohortClass.Cohort);
   const issuedAt = Math.round(Date.now() / 1000);
   const expiresAt = issuedAt + 3600 * 4;
   const oPayload = {
     sdkKey: env.NEXT_PUBLIC_ZOOM_CLIENT_ID,
     mn: meetingNumber,
-    role: cohort.Facilitator === req.body.participantId ? ZOOM_ROLE.HOST : ZOOM_ROLE.PARTICIPANT,
+    role: cohortClass.Facilitator === req.body.participantId ? ZOOM_ROLE.HOST : ZOOM_ROLE.PARTICIPANT,
     iat: issuedAt,
     exp: expiresAt,
     tokenExp: expiresAt,

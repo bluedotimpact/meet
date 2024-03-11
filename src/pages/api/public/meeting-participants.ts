@@ -63,7 +63,7 @@ export default apiRoute(async (
     throw new createHttpError.InternalServerError(`Cohort class ${cohortClass.id} missing Zoom account`);
   }
   const zoomAccount = await db.get(zoomAccountTable, cohortClass['Zoom account']);
-  const facilitator = await db.get(participantTable, cohort.Facilitator);
+  const facilitator = await db.get(participantTable, cohortClass.Facilitator);
   const participants = await Promise.all(
     cohortClass['Participants (Expected)']
       .map((participantId) => db.get(participantTable, participantId)),

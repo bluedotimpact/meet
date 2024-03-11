@@ -3,7 +3,6 @@ import { Table, Item } from './common/mapping/types';
 
 export interface Cohort extends Item {
   'Cohort sessions': string[],
-  'Facilitator': string,
   'Iteration (link) (from Facilitator)': string,
 }
 
@@ -13,12 +12,12 @@ export const cohortTable: Table<Cohort> = {
   tableId: env.AIRTABLE_COHORT_TABLE_ID,
   schema: {
     'Cohort sessions': 'string[]',
-    Facilitator: 'string',
     'Iteration (link) (from Facilitator)': 'string',
   },
 };
 
 export interface CohortClass extends Item {
+  'Facilitator': string,
   'Participants (Expected)': string[],
   'Attendees': string[],
   'Start date/time': number | null,
@@ -31,6 +30,7 @@ export const cohortClassTable: Table<CohortClass> = {
   baseId: env.AIRTABLE_BASE_ID,
   tableId: env.AIRTABLE_COHORT_CLASS_TABLE_ID,
   schema: {
+    Facilitator: 'string',
     'Participants (Expected)': 'string[]',
     Attendees: 'string[]',
     'Start date/time': 'number | null',
@@ -38,6 +38,7 @@ export const cohortClassTable: Table<CohortClass> = {
     'Zoom account': 'string | null',
   },
   mappings: {
+    Facilitator: '[>] Facilitator',
     'Participants (Expected)': '[>] Participants (Expected)',
     Attendees: '[>] Attendees',
     'Start date/time': 'Start date/time',
