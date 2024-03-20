@@ -30,7 +30,7 @@ const SelectPersonView: React.FC<SelectPersonViewProps> = ({ page: { cohortId },
   });
 
   const [joinWithApp, _setJoinWithApp] = useState(
-    JSON.parse(localStorage.getItem(LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY) ?? 'false'),
+    JSON.parse(localStorage.getItem(LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY) ?? 'true'),
   );
   const setJoinWithApp = (value: boolean) => {
     localStorage.setItem(LOCALSTORAGE_ZOOM_APP_PREFERENCE_KEY, JSON.stringify(value));
