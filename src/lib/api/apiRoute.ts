@@ -14,14 +14,15 @@ export const apiRoute = (handler: NextApiHandler, useAuth: true | 'insecure_no_a
     await handler(req, res);
   } catch (err: unknown) {
     if (createHttpError.isHttpError(err) && err.expose) {
-      console.warn('Error handling request:');
+      console.warn(`Error handling request on route ${req.method} ${req.url}:`);
       console.warn(err);
       res.status(err.statusCode).json({ error: err.message });
       return;
     }
-    console.error('Internal error handling request:');
+
+    console.error(`Internal error handling request on route ${req.method} ${req.url}:`);
     console.error(err);
-    await slackAlert(`Error: Failed request: ${err instanceof Error ? err.message : String(err)}`);
+    await slackAlert(`Error: Failed request on route ${req.method} ${req.url}: ${err instanceof Error ? err.message : String(err)}`);
     res.status(createHttpError.isHttpError(err) ? err.statusCode : 500).json({
       error: 'Internal Server Error',
     });
