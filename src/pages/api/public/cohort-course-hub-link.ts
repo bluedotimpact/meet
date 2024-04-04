@@ -20,7 +20,7 @@ export default apiRoute(async (
 ) => {
   const cohort = await db.get(cohortTable, req.body.cohortId);
   const iteration = await db.get(iterationTable, cohort['Iteration (link) (from Facilitator)']);
-  const course = await db.get(courseTable, iteration.Courses);
+  const course = await db.get(courseTable, iteration.Course);
 
   res.status(200).json({
     type: 'success',

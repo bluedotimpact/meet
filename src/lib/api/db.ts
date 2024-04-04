@@ -80,7 +80,7 @@ export const zoomAccountTable: Table<ZoomAccount> = {
 };
 
 export interface Iteration extends Item {
-  'Courses': string,
+  'Course': string,
 }
 
 export const iterationTable: Table<Iteration> = {
@@ -88,7 +88,7 @@ export const iterationTable: Table<Iteration> = {
   baseId: env.AIRTABLE_BASE_ID,
   tableId: env.AIRTABLE_ITERATION_TABLE_ID,
   schema: {
-    Courses: 'string',
+    Course: 'string',
   },
 };
 
