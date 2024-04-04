@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import createHttpError from 'http-errors';
-import db from '../../../lib/api/db';
-import {
+import db, {
   cohortClassTable, cohortTable, participantTable, zoomAccountTable,
-} from '../../../lib/api/db/tables';
+} from '../../../lib/api/db';
 import { apiRoute } from '../../../lib/api/apiRoute';
 import { parseZoomLink } from '../../../lib/zoomLinkParser';
 

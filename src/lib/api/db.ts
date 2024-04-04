@@ -1,5 +1,9 @@
-import env from '../env';
-import { Table, Item } from './common/mapping/types';
+import { AirtableTs, Table, Item } from 'airtable-ts';
+import env from './env';
+
+export default new AirtableTs({
+  apiKey: env.AIRTABLE_PERSONAL_ACCESS_TOKEN,
+});
 
 export interface Cohort extends Item {
   'Cohort sessions': string[],

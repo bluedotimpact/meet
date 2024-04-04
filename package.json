@@ -23,6 +23,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@zoom/meetingsdk": "^3.1.6",
     "airtable": "^0.12.2",
+    "airtable-ts": "^1.0.0",
     "axios": "^1.2.4",
     "axios-hooks": "^4.0.0",
     "clsx": "^1.2.1",

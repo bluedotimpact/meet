@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { apiRoute } from '../../../lib/api/apiRoute';
-import db from '../../../lib/api/db';
-import { cohortTable, courseTable, iterationTable } from '../../../lib/api/db/tables';
+import db, { cohortTable, courseTable, iterationTable } from '../../../lib/api/db';
 
 export type CohortCourseHubLinkRequest = {
   cohortId: string,
