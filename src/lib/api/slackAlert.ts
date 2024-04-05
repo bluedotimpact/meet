@@ -24,6 +24,7 @@ const sendSingleSlackMessage = async (message: string, threadTs?: string): Promi
     data: {
       channel: env.ALERTS_SLACK_CHANNEL_ID,
       text: `meet: ${message}`,
+      thread_ts: threadTs,
     },
   }).then((res) => {
     if (!res.data.ok) {
