@@ -1,6 +1,5 @@
 import createHttpError from 'http-errors';
 import { NextApiHandler } from 'next';
-import AirtableError from 'airtable/lib/airtable_error';
 import { slackAlert } from './slackAlert';
 
 export const apiRoute = (handler: NextApiHandler, useAuth: true | 'insecure_no_auth' = true): NextApiHandler => async (req, res) => {
