@@ -2,9 +2,17 @@ import axios from 'axios';
 import { getAirtableLink } from '../airtableLink';
 import env from './env';
 
-export const slackAlert = async (message: string): Promise<void> => {
-  console.log(`Sending Slack: ${message}`);
+export const slackAlert = async (messages: string[]): Promise<void> => {
+  if (messages.length === 0) return;
+  const res = await sendSingleSlackMessage(messages[0]);
+  for (let i = 1; i < messages.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    await sendSingleSlackMessage(messages[i], res.ts);
+  }
+};
 
+const sendSingleSlackMessage = async (message: string, threadTs?: string): Promise<{ ts: string }> => {
+  console.log(`Sending Slack (thread: ${threadTs ?? 'none'}): ${message}`);
   return axios({
     method: 'post',
     baseURL: 'https://slack.com/api/',
@@ -19,10 +27,9 @@ export const slackAlert = async (message: string): Promise<void> => {
     },
   }).then((res) => {
     if (!res.data.ok) {
-      console.error(`Error from Slack API: ${res.data.error}`);
+      throw new Error(`Error from Slack API: ${res.data.error}`);
     }
-  }).catch((err) => {
-    console.error(`Error from Slack API: ${err}`);
+    return { ts: res.data.ts };
   });
 };
 

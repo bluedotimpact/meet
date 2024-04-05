@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import { NextApiHandler } from 'next';
+import AirtableError from 'airtable/lib/airtable_error';
 import { slackAlert } from './slackAlert';
 
 export const apiRoute = (handler: NextApiHandler, useAuth: true | 'insecure_no_auth' = true): NextApiHandler => async (req, res) => {
@@ -22,7 +23,14 @@ export const apiRoute = (handler: NextApiHandler, useAuth: true | 'insecure_no_a
 
     console.error(`Internal error handling request on route ${req.method} ${req.url}:`);
     console.error(err);
-    await slackAlert(`Error: Failed request on route ${req.method} ${req.url}: ${err instanceof Error ? err.message : String(err)}`);
+    try {
+      await slackAlert([
+        `Error: Failed request on route ${req.method} ${req.url}: ${err instanceof Error ? err.message : String(err)}`,
+        ...(err instanceof Error ? [`Stack:\n\`\`\`${err.stack}\`\`\``] : []),
+      ]);
+    } catch (slackError) {
+      console.error('Failed to send Slack', slackError);
+    }
     res.status(createHttpError.isHttpError(err) ? err.statusCode : 500).json({
       error: 'Internal Server Error',
     });
