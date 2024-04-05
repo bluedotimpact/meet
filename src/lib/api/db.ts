@@ -93,7 +93,7 @@ export const iterationTable: Table<Iteration> = {
 };
 
 export interface Course extends Item {
-  'Course site': string,
+  '[*] Course Site': string,
 }
 
 export const courseTable: Table<Course> = {
@@ -101,6 +101,6 @@ export const courseTable: Table<Course> = {
   baseId: env.AIRTABLE_BASE_ID,
   tableId: env.AIRTABLE_COURSE_TABLE_ID,
   schema: {
-    'Course site': 'string',
+    '[*] Course Site': 'string',
   },
 };
