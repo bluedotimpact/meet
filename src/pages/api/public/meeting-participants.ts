@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import createHttpError from 'http-errors';
+import AirtableError from 'airtable/lib/airtable_error';
 import db, {
+  Cohort,
   cohortClassTable, cohortTable, participantTable, zoomAccountTable,
 } from '../../../lib/api/db';
 import { apiRoute } from '../../../lib/api/apiRoute';
@@ -33,7 +35,15 @@ export default apiRoute(async (
   req: NextApiRequest,
   res: NextApiResponse<MeetingParticipantsResponse>,
 ) => {
-  const cohort = await db.get(cohortTable, req.body.cohortId);
+  let cohort: Cohort;
+  try {
+    cohort = await db.get(cohortTable, req.body.cohortId);
+  } catch (err) {
+    if (err instanceof AirtableError && err.statusCode === 404) {
+      throw new createHttpError.NotFound(`Cohort ${req.body.cohortId} not found`);
+    }
+    throw err;
+  }
   const cohortClasses = await Promise.all(
     cohort['Cohort sessions']
       .map((cohortClassId) => db.get(cohortClassTable, cohortClassId)),
