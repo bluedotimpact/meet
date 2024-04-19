@@ -3,18 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "shx cp -n .env.template .env.local",
     "build": "next build",
     "start": "next dev",
     "lint": "eslint src",
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy:prod": "VERCEL_PROJECT_ID=prj_XtaVRKBQGBO5AWPJmPr64tZBZGiN VERCEL_ORG_ID=team_KhtQSVbEoibKvwqqqhwviVnO npm run _deploy:vercel",
-    "_deploy:vercel": "vercel build --yes --prod --token=$VERCEL_TOKEN && vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN",
-    "postinstall": "shx cp -n .env.template .env.local && patch-package"
+    "_deploy:vercel": "vercel build --yes --prod --token=$VERCEL_TOKEN && vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.16",
-    "@next/font": "13.1.5",
     "@types/http-errors": "^2.0.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "18.11.18",
@@ -31,9 +30,8 @@
     "eslint-config-next": "13.1.5",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.1",
-    "next": "^13.4.12",
+    "next": "^14.3.0-canary.11",
     "node-mocks-http": "^1.12.1",
-    "patch-package": "^7.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "shx": "^0.3.4",
