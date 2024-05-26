@@ -1,4 +1,8 @@
-# meet ![deployment automatic](https://img.shields.io/badge/deployment-automatic-success)
+_This repository is archived. We moved the code to [our monorepo](https://github.com/bluedotimpact/bluedot/tree/master/apps/meet)._
+
+---
+
+# meet
 
 An app for hosting meetings, e.g. facilitated sessions on our courses.
 

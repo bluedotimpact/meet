@@ -1,6 +1,7 @@
 {
   "name": "meet",
   "version": "0.1.0",
+  "license": "AGPL-3.0-only",
   "private": true,
   "scripts": {
     "postinstall": "shx cp -n .env.template .env.local",
